@@ -7,7 +7,7 @@ test_data <- read.csv("https://raw.githubusercontent.com/PittDataScience/CourseC
 # Performing Exploratory data analysis and data pre processing to understand various variables.
 
 
-
+# We will try various regression models on the dataset.
 
 
 
