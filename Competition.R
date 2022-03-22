@@ -182,6 +182,75 @@ Linear_reg_RMSE_3
 
 
 
+# TRYING SVM Model 2
+
+data2<- data
+
+df_pred <- data.frame(data2 %>%select(-outcome))
+
+
+# Applying Box Cox transformation with SVM
+
+df_preprocess_fit<- preProcess(
+  df_pred, method = c("BoxCox", "center", "scale"))
+df_preprocess_fit
+
+transformed_predictors <- predict(
+  df_preprocess_fit, df_pred)
+
+data_final <- add_column(transformed_predictors, outcome = data$outcome)
+
+
+set.seed(100)
+split_4 = sample.split(data_final$outcome, SplitRatio = 0.8)
+training_set_4 = subset(data_final, split_4 == TRUE)
+test_set_4 = subset(data_final, split_4 == FALSE)
+
+regressor_svm_1 = svm( outcome ~ .,
+                     data = training_set_4,
+                     type = 'eps-regression',
+                     kernel = 'radial')
+summary(regressor_svm_1)
+y_pred_4 = predict(regressor_svm_1, newdata = test_set_4)
+
+Linear_reg_RMSE_4 <-RMSE(y_pred_4, test_set_4$outcome)
+Linear_reg_RMSE_4
+
+# RMSE value increases, so not applying this model fit 
+
+# MODEL -5 
+# creating model 5  for box cox transform and linear fit 
+
+set.seed(100)
+split_5 = sample.split(data_final$outcome, SplitRatio = 0.8)
+training_set_5 = subset(data_final, split_5 == TRUE)
+test_set_5 = subset(data_final, split_5 == FALSE)
+
+Linear_regression_5 = lm( outcome ~.,
+                          data = training_set_5)
+summary(Linear_regression_5)
+# Predicting the Test set results
+y_pred_5 = predict(Linear_regression_5, newdata = test_set_5)
+
+
+#training error
+sqrt(mean(Linear_regression_5$residuals^2))
+
+# test error 
+
+sqrt(mean((y_pred_5 - test_set_5$outcome)^2))
+
+# RMSE error 
+
+Linear_reg_RMSE_5 <-RMSE(y_pred_5, test_set_5$outcome)
+Linear_reg_RMSE_5
+
+# RMSE value increaese so not applying this model 
+
+
+
+
+
 
 
 
