@@ -6,6 +6,7 @@ library(corrplot)
 library(caret)
 library(lattice)
 library(pls)
+library(e1071)
 data<- read.csv("https://raw.githubusercontent.com/PittDataScience/CourseContent/master/Assignments/competition/competition-data.csv?token=GHSAT0AAAAAABSJ23EEZ74BPHO5546DNXMQYRSVYNQ")
 test_data <- read.csv("https://raw.githubusercontent.com/PittDataScience/CourseContent/master/Assignments/competition/competition-test-x-values.csv?token=GHSAT0AAAAAABSJ23EFB5P55YBCQWUQQWKGYRSVZKA")
 
@@ -138,7 +139,7 @@ test_set_2 = subset(data, split_2 == FALSE)
 # training_set_2<- data.frame(training_set_2)
 # test_set_2<- data.frame(test_set_2)
 # Fitting Simple Linear Regression to the Training set
-Linear_regression_2 = lm( outcome ~ X1+X2+X6+X9+X10+X11+X12+X17+X18+X19+X20+X21 ,
+Linear_regression_2 = lm( outcome ~.,
                         data = training_set_2)
 summary(Linear_regression_2)
 # Predicting the Test set results
@@ -157,12 +158,26 @@ sqrt(mean((y_pred_2 - test_set_2$outcome)^2))
 Linear_reg_RMSE_2 <-RMSE(y_pred_2, test_set_2$outcome)
 Linear_reg_RMSE_2
 
-# With Highly statistically significant predictors, I got an RMSE Value of 9.60
+# With Highly statistically significant predictors, I got an RMSE Value of 9.56
 
 
+# TRYING SVM Model
 
+set.seed(100)
+split_3 = sample.split(data$outcome, SplitRatio = 0.8)
+training_set_3 = subset(data, split_3 == TRUE)
+test_set_3 = subset(data, split_3 == FALSE)
 
+regressor_svm = svm( outcome ~ .,
+                data = training_set_3,
+                type = 'eps-regression',
+                kernel = 'radial')
+summary(regressor_svm)
+y_pred_3 = predict(regressor_svm, newdata = test_set_3)
 
+Linear_reg_RMSE_3 <-RMSE(y_pred_3, test_set_3$outcome)
+Linear_reg_RMSE_3
+# so, with the RMSE score is 4.12
 
 
 
