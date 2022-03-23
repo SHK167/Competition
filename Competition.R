@@ -457,6 +457,23 @@ write.csv(prediction, "Outcome.csv", row.names = FALSE)
 
 
 
+# SVM 
+
+#SVM
+
+svmRTuned <- train(
+  pca_train_predictors, pca_train_outcome,
+  method = "svmRadial",
+  tuneLength = 8,
+  epsilon = 0.01,
+  trControl = ctrl
+)
+min(svmRTuned$result$RMSE)
+svmRTuned$bestTune
+ggplot(svmRTuned)
+
+
+
 
 
 
