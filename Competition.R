@@ -455,8 +455,14 @@ prediction <- data.frame(prediction_1)
 
 write.csv(prediction, "Outcome.csv", row.names = FALSE)
 
+Copy_1 <- read.csv("Outcome.csv")
 
+data_round <- Copy_1 %>%               
+  mutate_if(is.numeric,
+            round,
+            digits = 0)
 
+write.csv(data_round, "Outcome_1.csv", row.names = FALSE)
 # SVM 
 
 #SVM
