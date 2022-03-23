@@ -416,6 +416,19 @@ print(lmTune$results)
 trainfit_LR <- RMSE( predict(lmTune, pca_train_predictors), pca_train_outcome)
 trainfit_LR
 
+#SVM
+
+svmRTuned <- train(
+  pca_train_predictors, pca_train_outcome,
+  method = "svmRadial",
+  tuneLength = 8,
+  epsilon = 0.01,
+  trControl = ctrl
+)
+min(svmRTuned$result$RMSE)
+svmRTuned$bestTune
+ggplot(svmRTuned)
+
 
 
 
