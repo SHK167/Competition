@@ -207,10 +207,6 @@ Linear_reg_RMSE_3
 
 
 
-
-
-
-
 # fitted <- preProcess(
 #   df_pred, 
 #   method = c("pca"),
@@ -247,6 +243,92 @@ Linear_reg_RMSE_3
 
 
 # We will try various regression models on the dataset.
+
+
+
+
+
+#train the data
+limit<-train(df-x,df_y,method="lm")
+
+
+#train and the test the data
+train <- data[split1 == 0, ] 
+test <- data[split1== 1, ]    
+
+
+
+
+dt = sort(sample(nrow(data), nrow(data)*.8))
+train<-data[dt,]
+test<-data[-dt,]
+
+#split the train 0.8 and test 0.2
+library(caTools)
+split=sample.split(comepetition_data,splitRatio=0.8)
+training_set=subset(dataset,split==TRUE)
+test_set=subset(dataset,split==FALSE)
+
+#prepredict the data
+
+predict(object,newdata,interval)
+#Creates a linear model
+my_linear_model <- lm(dist~speed,data = df)
+
+#Prints the model results 
+my_linear_model
+
+
+#Creating a data frame
+variable<-data.frame(speed=c(11,11,12,12,12,12,13,13,13,13))
+
+#fitting the linear model
+liner_model<-lm(dist~speed,data = df)
+
+#predicts the future values
+predict(liner_model,newdata = variable_speed)
+
+#Input data
+variable_speed <-data.frame(speed=c(11,11,12,12,12,12,13,13,13,13))
+
+#Fits the model
+liner_model<-lm(dist~speed,data = df)
+
+#Predicts the values with confidence interval 
+predict(liner_model,newdata = variable_speed,interval = 'confidence')
+
+#Mars method
+library(earth)
+data("etitanic", package = "earth")
+# Non-linear models: Multivariate Adaptive Regression Splines (MARS)
+
+set.seed(100)
+ThemarsGrid <- expand.grid(.degree = 1:2, .nprune = c(10, 20, 30, 40))
+TheMarsFit <- train(data_x, data_y,
+                    method = "earth",
+                    tuneGrid = ThemarsGrid,
+                    trControl = ctrl
+)
+
+
+
+ggplot(TheMarsFit)
+min(TheMarsFit$results$RMSE)
+TheMarsFit$bestTune
+
+
+# Trees: Regression tree
+
+set.seed(100)
+ThecartTune <- train(x = data_x, y = data_y,
+                     method = "rpart",
+                     tuneLength = 15,
+                     trControl = ctrl)
+ggplot(ThecartTune)
+min(ThecartTune$results$RMSE)
+ThecartTune$bestTune
+
+
 
 
 
