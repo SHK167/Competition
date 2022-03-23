@@ -398,6 +398,39 @@ min(ThecartTune$results$RMSE)
 ThecartTune$bestTune
 
 
+folds <- createFolds(pca_train_outcome, k = 2, returnTrain = TRUE)
+ctrl <- trainControl(method = "cv", index = folds)
+
+# LINEAR REGRESSION
+
+
+set.seed(100)
+lmTune<- train(x= pca_train_predictors, y= pca_train_outcome,
+               method = "lm",
+               trControl = ctrl)
+lmTune
+print(lmTune$results)
+### Evaluating the training error for the Linear regression model
+#### RMSE
+
+trainfit_LR <- RMSE( predict(lmTune, pca_train_predictors), pca_train_outcome)
+trainfit_LR
+
+#SVM
+
+svmRTuned <- train(
+  pca_train_predictors, pca_train_outcome,
+  method = "svmRadial",
+  tuneLength = 8,
+  epsilon = 0.01,
+  trControl = ctrl
+)
+min(svmRTuned$result$RMSE)
+svmRTuned$bestTune
+ggplot(svmRTuned)
+
+
+
 
 
 # We will try various regression models on the dataset.
