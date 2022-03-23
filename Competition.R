@@ -403,7 +403,24 @@ ThecartTune$bestTune
 # We will try various regression models on the dataset.
 
 
+# Trying other models 
 
+#MARS
+
+
+library(earth)
+marsGrid <- expand.grid(.degree = 1:2, .nprune = c(20, 30, 40, 50))
+marsFit <- train(pca_train_predictors, pca_train_outcome,
+                 method = "earth",
+                 tuneGrid = marsGrid,
+                 trControl = ctrl
+)
+print(min(marsFit$results$RMSE))
+
+prediction_1 <- predict(marsFit,newdata=test_data)
+prediction <- data.frame(prediction_1)
+
+write.csv(prediction, "Outcome.csv", row.names = FALSE)
 
 
 
